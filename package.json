@@ -1,0 +1,30 @@
+{
+  "name": "terminal_todo",
+  "version": "0.0.1",
+  "description": "Manage todos from the terminal",
+  "main": "./terminal_todo",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/briankboyd/Terminal-Todo.git"
+  },
+  "keywords": [
+    "todo",
+    "command",
+    "line",
+    "terminal",
+    "node",
+    "typescript"
+  ],
+  "author": "Brian Boyd",
+  "license": "MIT",
+  "bin": {
+    "tt": "./terminal_todo"
+  },
+  "bugs": {
+    "url": "https://github.com/briankboyd/Terminal-Todo.git/issues"
+  },
+  "homepage": "https://github.com/briankboyd/Terminal-Todo.git#readme"
+}
