@@ -32,7 +32,6 @@ export class Command {
         if (this._args.length === 0 || this._args.charAt(0) !== this._commandDelimiter) {
 
             this.printUsage();
-            process.exit(0);
 
         } else {
 
@@ -48,7 +47,6 @@ export class Command {
                 //if they aren't then display incorrect usage and then display usage
                 //right now I'm not tracking the incorrect usage
                 this.printUsage();
-                process.exit(0);
             } else {
                 //exectute commands
                 this.commands.forEach(cmd => {
@@ -58,10 +56,7 @@ export class Command {
                         }
                     });
                 });
-
-
             }
-
         }
     }
 
@@ -70,6 +65,7 @@ export class Command {
             console.log('Usage:');
             console.log(this._commandDelimiter + element.command + ' ' + element.usage);
         });
+        process.exit();
     }
 
     private validateInput(input: CmdWithParams[]): boolean {
