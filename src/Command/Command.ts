@@ -1,4 +1,3 @@
-import {isEmpty} from '../Util/Util';
 
 export class Command {
     private commands: CmdDef[] = [];
