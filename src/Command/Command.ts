@@ -60,8 +60,8 @@ export class Command {
     }
 
     public printUsage() {
+        console.log('Usage:');
         this.commands.forEach(element => {
-            console.log('Usage:');
             console.log(this._commandDelimiter + element.command + ' ' + element.usage);
         });
         process.exit();
