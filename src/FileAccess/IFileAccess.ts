@@ -2,7 +2,7 @@
 interface IFileAccess {
     getFilePath(): string;
     setFilePath(file: string);
-    readFile();
+    readFile(callback:Function);
     createFile();
-    updateFile();
+    updateFile(contents:string);
 }

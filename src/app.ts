@@ -1,23 +1,16 @@
 
 import {Command} from './Command/Command';
-
+import {ManageTodo} from './ManageToDo/ManageToDo';
 class Todo_CLI {
 
     public main(args: string[]): void {
-
+        let file:string = './todos.txt';
+        const manageToDo = new ManageTodo(file);
         const command = new Command();
         command
             .commandDelimiter('-')
-            .command('add', 'adds an item to the todo list', function (inputParams: string) {
-                console.log('add command entered');
-                console.log(inputParams);
-            })
-            .process(args);
-
-        //    command.args.forEach(val => {
-        //        console.log(val);
-
-        //    });             
+            .command('add', 'adds an item to the todo list', manageToDo.addTodo)
+            .process(args);          
     }
 }
 
