@@ -1,8 +1,10 @@
 
 export class Command {
-    private commands: CmdDef[] = [];
+    private _commands: CmdDef[] = [];
     private _args: string;
     private _commandDelimiter: string = '-';
+    private _inputCommand;
+    private _inputParams;
 
     get args(): string {
         return this._args;
@@ -10,11 +12,13 @@ export class Command {
 
     public command(command: string, usage: string, action: Function): Command {
         let cmdDef = {
-            command: command,
+            command: this._commandDelimiter + command,
             usage: usage,
-            action: action
+            action: action,
+            params: null,
+            fireAction: null
         }
-        this.commands.push(cmdDef);
+        this._commands.push(cmdDef);
         return this;
     }
 
@@ -33,27 +37,20 @@ export class Command {
             this.printUsage();
 
         } else {
-
-            let cmds = {
-                command: this._args.substr(0, this._args.indexOf(' ')).substr(1),
-                params: this._args.substr(this._args.indexOf(' ') + 1)
+            const input = this._args.split(/^([\w\-]+)/).filter(Boolean);
+            const cmds = {
+                command: input[0],
+                params: input[1] === undefined ? null : input[1].trim()
             }
-
             cmdWithParams.push(cmds);
 
-            // Need to determine if all commands given by user are valid
             if (!this.validateInput(cmdWithParams)) {
-                //if they aren't then display incorrect usage and then display usage
-                //right now I'm not tracking the incorrect usage
                 this.printUsage();
             } else {
-                //exectute commands
-                this.commands.forEach(cmd => {
-                    cmdWithParams.forEach(cmdInput => {
-                        if (cmd.command === cmdInput.command) {
-                            cmd.action(cmdInput.params);
-                        }
-                    });
+                this._commands.forEach(cmd => {
+                    if (cmd.fireAction) {
+                        cmd.action(cmd.params);
+                    }
                 });
             }
         }
@@ -61,31 +58,38 @@ export class Command {
 
     public printUsage() {
         console.log('Usage:');
-        this.commands.forEach(element => {
+        this._commands.forEach(element => {
             console.log(this._commandDelimiter + element.command + ' ' + element.usage);
         });
         process.exit();
     }
 
     private validateInput(input: CmdWithParams[]): boolean {
-        let filteredCmds: string[];
+        let countValidCmds:number = 0;
+        try {
+            for (let i = 0; i < input.length; i++) {
+                for(let j = 0; j < this._commands.length;  j++) {
+                    if (input[i].command === this._commands[j].command) {
+                        countValidCmds++;
+                        this._commands[j].params = input[i].params;
+                        this._commands[j].fireAction = true;
+                    }
 
-        this.commands.forEach((cmd) => {
-            filteredCmds = this.filterOutValidCmds(input, cmd.command);
-        });
-        return filteredCmds.length === 0 ? true : false;
+                }
+                return countValidCmds === input.length;
+            }
+        } catch (error) {
+            this.printUsage();
+        }
     }
-
-    private filterOutValidCmds(originalArr: any[], elementToRemove: any) {
-        return originalArr.filter(function (el) { return el.command !== elementToRemove });
-    }
-
 }
 
 interface CmdDef {
     command: string;
     usage: string;
     action: Function;
+    params?: string;
+    fireAction?: boolean;
 }
 
 interface CmdWithParams {

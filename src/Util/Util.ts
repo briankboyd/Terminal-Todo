@@ -7,3 +7,7 @@ export function isEmpty(value):boolean {
     }
     return isEmpty;
 }
+
+export function getDate()  {
+    return new Date().toLocaleString().replace(',', '');
+}
