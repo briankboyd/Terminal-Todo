@@ -8,7 +8,13 @@ export abstract class FileAccess implements IFileAccess {
     private file: string;
     private encoding: string = 'utf8';
 
-    static get EOL(): string { return _EOL };
+    static get EOL(): string {
+        return _EOL
+    }
+
+    static get log() {
+        return console.log.bind(console);
+    }
 
     getFilePath() {
         return this.file;
@@ -25,7 +31,7 @@ export abstract class FileAccess implements IFileAccess {
                     if (callback) {
                         callback(contents);
                     } else {
-                        console.log(contents);
+                        FileAccess.log(contents);
                     }
                 }
             });
